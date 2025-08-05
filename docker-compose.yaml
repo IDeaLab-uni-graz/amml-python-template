@@ -1,0 +1,31 @@
+name: "amml-python-template"
+services:
+  # Note: If desired, add "version: slim" to the build args
+  amml-project-cpu:
+    build:
+      context: .
+      args:
+        hardware: cpu
+    env_file: ".env"
+    command: bash
+    volumes:
+      - .:/opt/project
+    image: amml-project-cpu:latest
+  amml-project-cuda:
+    build:
+      context: .
+      args:
+        hardware: cuda
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities:
+                - gpu
+    env_file: ".env"
+    command: bash
+    volumes:
+      - .:/opt/project
+    image: amml-project-cuda:latest

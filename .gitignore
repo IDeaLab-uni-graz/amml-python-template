@@ -1,0 +1,8 @@
+# Data & Tmp folder
+data/*
+!data/.gitkeep
+tmp/*
+!tmp/.gitkeep
+
+# Env file
+.env
