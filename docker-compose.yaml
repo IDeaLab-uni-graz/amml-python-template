@@ -1,12 +1,18 @@
-name: "amml-python-template"
+name: "amml_python_ml_template"
 services:
   # Note: If desired, add "version: slim" to the build args
+  # Warn: We cannot set the Docker container to work in the
+  # `host` mode, as it interferes with PyCharm handling of
+  # how Jupyter is run. However, we can make an alias for
+  # the host network accessible to the Docker container.
   amml-project-cpu:
     build:
       context: .
       args:
         hardware: cpu
     env_file: ".env"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     command: bash
     volumes:
       - .:/opt/project
@@ -25,6 +31,8 @@ services:
               capabilities:
                 - gpu
     env_file: ".env"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     command: bash
     volumes:
       - .:/opt/project
