@@ -29,14 +29,20 @@ or
 docker compose run --build --rm amml-project-gpu # GPU Version
 ```
 
-### Optional: Mounting data from the shared UniCloud folder
+### Optional: Download data from the shared UniCloud folder
 
-Our best practice is to host internal datasets in the `AMML_shared/datasets` folder in [UniCloud](https://cloud.uni-graz.at). To mount data, you need to set your UniCloud credentials in `.env`:
+Our best practice is to host internal datasets in the `AMML_shared/datasets` folder in [UniCloud](https://cloud.uni-graz.at). To download data from there, you need to set your UniCloud credentials in `.env`:
 
 - ) `NEXTCLOUD_USERNAME` should be set to your user name, typically `firstname.lastname`
 - ) Login at [UniCloud](https://cloud.uni-graz.at), got to *Settings/Security*, and create a new device passwort by entering our device in *App name* and clicking *Create new app password*. This password then needs to be set in `NEXTCLOUD_PASSWORD`
 
-After this, you can run `python utils/sync_webdav_files.py` in the active container to test the setup via downloading dummy files. **TODO: please add this, maybe also rename python file to get_data.py or similar?** After that, adapt `utils/sync_webdav_files.py` to get your project-specific files.
+After this, you can run
+
+```python utils/nexcloud_data_loader.py```
+
+to list all currently available datasets. An example of how to load one of these datasets can be found in `ammml-python-template/dataloader_example.py`.
+
+> Note: Upon usage of the dataset, the data will be downloaded into `/data/datasetname` automatically if not already available locally.
 
 > See `AMML_shared/datasets/README_datasets.md` for further information on how to add new datasets.
 
