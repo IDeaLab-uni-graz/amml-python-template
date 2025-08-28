@@ -12,20 +12,22 @@ docker compose run --build --rm amml-project-cpu
 
 ## Using this as base for a new project
 
-1) Download the content of this repostory (do not `clone` it!) into your desired project directory.
+1) **Use it as a template:**
+   1) **GitHub**: Create new repository and in the _Configuration_ section set **Start with a template** to `IDeaLab-uni-graz/amml-python-template`, then `git clone` it
+   2) **Locally**: Download the content of this repository (do **not** `git clone` it!) into your desired project directory.
 2) Rename the project name `name: "amml_python_ml_template"` in `docker-compose.yaml`
 3) Rename source folder, called `amml-python-template/` in the template
 4) Write a (good) `README.md`, possibly also change a license
 
 After this, you can run your project with 
 
-```
+```shell
 docker compose run --build --rm amml-project-cpu # CPU Version
 ```
 
 or 
 
-```
+```shell
 docker compose run --build --rm amml-project-gpu # GPU Version
 ```
 
@@ -40,7 +42,7 @@ After this, you can run
 
 ```python utils/nexcloud_data_loader.py```
 
-to list all currently available datasets. An example of how to load one of these datasets can be found in `ammml-python-template/dataloader_example.py`.
+to list all currently available datasets. An example of how to load one of these datasets can be found in `amml-python-template/dataloader_example.py`.
 
 > Note: Upon usage of the dataset, the data will be downloaded into `/data/datasetname` automatically if not already available locally.
 
@@ -48,7 +50,7 @@ to list all currently available datasets. An example of how to load one of these
 
 1) ### Using the template with PyCharm
 
-If you want to use PyChar for your project, the following needs to be done in addition:What needs to be done after starting a new project to use it with PyCharm:
+If you want to use PyCharm for your project, the following needs to be done in addition:What needs to be done after starting a new project to use it with PyCharm:
 
 - [ ] Set up the Python interpreter to use **Docker compose**, or possibly also Docker.
 - [ ] Set the Jupyter server to listen on all addresses by adding `--ip 0.0.0.0` to _command line arguments_ for the local Jupyter connection.
