@@ -4,22 +4,45 @@ This is the basic light-weight template for Python + Pytorch projects running on
 
 For standard machine learning Python projects in the AMML team use the complete [AMML Python ML template](https://github.com/IDeaLab-uni-graz/amml-python-ml-template). More information regarding the design and contents of the base images can be found in the [respective repository](https://github.com/IDeaLab-uni-graz/AMML-Python-Base).
 
-Run with, e.g., 
+To make a quick testrun (for testing only!), copy the `.env.example` file, rename the copy to `.env` and run
+
 ```
 docker compose run --build --rm amml-project-cpu
 ```
 
-## Template Checklist
+## Using this as base for a new project
 
-What needs to be done after starting a new project:
+1) Download the content of this repostory (do not `clone` it!) into your desired project directory.
+2) Rename the project name `name: "amml_python_ml_template"` in `docker-compose.yaml`
+3) Rename source folder, called `amml-python-template/` in the template
+4) Write a (good) `README.md`, possibly also change a license
 
-- [ ] Rename project in `docker-compose.yaml`
-- [ ] Rename source folder, here `amml-python-template/`
-- [ ] Write a (good) `README.md`, possibly also change a license
+After this, you can run your project with 
 
-### PyCharm Checklist
+```
+docker compose run --build --rm amml-project-cpu # CPU Version
+```
 
-What needs to be done after starting a new project to use it with PyCharm:
+or 
+
+```
+docker compose run --build --rm amml-project-gpu # GPU Version
+```
+
+### Optional: Mounting data from the shared UniCloud folder
+
+Our best practice is to host internal datasets in the `AMML_shared/datasets` folder in [UniCloud](https://cloud.uni-graz.at). To mount data, you need to set your UniCloud credentials in `.env`:
+
+- ) `NEXTCLOUD_USERNAME` should be set to your user name, typically `firstname.lastname`
+- ) Login at [UniCloud](https://cloud.uni-graz.at), got to *Settings/Security*, and create a new device passwort by entering our device in *App name* and clicking *Create new app password*. This password then needs to be set in `NEXTCLOUD_PASSWORD`
+
+After this, you can run `python utils/sync_webdav_files.py` in the active container to test the setup via downloading dummy files. **TODO: please add this, maybe also rename python file to get_data.py or similar?** After that, adapt `utils/sync_webdav_files.py` to get your project-specific files.
+
+> See `AMML_shared/datasets/README_datasets.md` for further information on how to add new datasets.
+
+1) ### Using the template with PyCharm
+
+If you want to use PyChar for your project, the following needs to be done in addition:What needs to be done after starting a new project to use it with PyCharm:
 
 - [ ] Set up the Python interpreter to use **Docker compose**, or possibly also Docker.
 - [ ] Set the Jupyter server to listen on all addresses by adding `--ip 0.0.0.0` to _command line arguments_ for the local Jupyter connection.
@@ -33,6 +56,7 @@ In case one decides to use the **Docker Python interpreter**, it is also necessa
 ## Structure
 
 Description of files and directories belonging to this repository:
+
 - `amml-python-template/` - source code directory to be renamed when using the template
   - `.../main.py` or `.../__init__.py` - entrypoint of the Python codebase
 - `data/` - directory for (large) data, which should not be version controlled by default
@@ -44,6 +68,7 @@ Description of files and directories belonging to this repository:
 
 > [!TIP]
 > If you need a newer version of one of the base images, you might need to "force pull" the image from DockerHub to replace the locally cached version
+> 
 > ```shell
 > docker pull sceptri/amml-python-base-cpu:latest
 > ```
