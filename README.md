@@ -40,7 +40,9 @@ Our best practice is to host internal datasets in the `AMML_shared/datasets` fol
 
 After this, you can run
 
-```python utils/nexcloud_data_loader.py```
+```shell
+python utils/nextcloud_data_loader.py
+```
 
 to list all currently available datasets. An example of how to load one of these datasets can be found in `amml-python-template/dataloader_example.py`.
 
