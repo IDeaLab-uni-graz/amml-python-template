@@ -66,7 +66,7 @@ def _download_files(directory, override=False):
 
     nc = nextcloud_login()
 
-    print(f"Downloading files...")
+    print("Downloading files...")
     zip_path = nc.files.download_directory_as_zip(directory, tmp_path)
 
     print("Extracting files...")

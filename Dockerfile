@@ -13,6 +13,9 @@ LABEL authors="sceptri"
 WORKDIR /opt/project/
 
 # Add something here!
+# For example install additional project-specific Python dependencies
+COPY requirements.txt requirements.txt
+RUN pip install --upgrade pip && pip install -r requirements.txt
 
 # Entrypoint shell script is necessary to make it work with PyCharm when docker compose is the Python interpreter
 COPY entrypoint.sh /entrypoint.sh
