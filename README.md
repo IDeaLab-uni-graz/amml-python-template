@@ -17,7 +17,8 @@ docker compose run --build --rm amml-project-cpu
    2) **Locally**: Download the content of this repository (do **not** `git clone` it!) into your desired project directory.
 2) Rename the project name `name: "amml_python_ml_template"` in `docker-compose.yaml`
 3) Rename source folder, called `amml-python-template/` in the template
-4) Write a (good) `README.md`, possibly also change a license
+4) Setup project Docker image by updating `Dockerfile`, `requirements.txt` or `docker-compose.yaml`
+5) Write a (good) `README.md`, possibly also change a license
 
 After this, you can run your project with 
 
@@ -40,7 +41,9 @@ Our best practice is to host internal datasets in the `AMML_shared/datasets` fol
 
 After this, you can run
 
-```python utils/nexcloud_data_loader.py```
+```shell
+python utils/nextcloud_data_loader.py
+```
 
 to list all currently available datasets. An example of how to load one of these datasets can be found in `amml-python-template/dataloader_example.py`.
 
@@ -48,7 +51,7 @@ to list all currently available datasets. An example of how to load one of these
 
 > See `AMML_shared/datasets/README_datasets.md` for further information on how to add new datasets.
 
-1) ### Using the template with PyCharm
+### Optional: Using the template with PyCharm
 
 If you want to use PyCharm for your project, the following needs to be done in addition:What needs to be done after starting a new project to use it with PyCharm:
 
