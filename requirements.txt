@@ -1,2 +1,4 @@
+# To ensure correct handling of multiple requirements.txt files, we always include them
+-r base_requirements.txt
 # Only necessary for the example dataset!
 imageio
