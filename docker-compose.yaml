@@ -17,6 +17,18 @@ services:
     volumes:
       - .:/opt/project
     image: amml-project-cpu:latest
+  amml-project-hydra-cpu:
+    build:
+      context: .
+      args:
+        hardware: cpu
+    env_file: ".env"
+    extra_hosts:
+      - "host.docker.internal:10.18.74.13"
+    command: bash
+    volumes:
+      - .:/opt/project
+    image: amml-project-cpu:latest
   amml-project-cuda:
     build:
       context: .
@@ -33,6 +45,26 @@ services:
     env_file: ".env"
     extra_hosts:
       - "host.docker.internal:host-gateway"
+    command: bash
+    volumes:
+      - .:/opt/project
+    image: amml-project-cuda:latest
+  amml-project-hydra-cuda:
+    build:
+      context: .
+      args:
+        hardware: cuda
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities:
+                - gpu
+    env_file: ".env"
+    extra_hosts:
+      - "host.docker.internal:10.18.74.13"
     command: bash
     volumes:
       - .:/opt/project
