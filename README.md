@@ -20,17 +20,27 @@ docker compose run --build --rm amml-project-cpu
 4) Setup project Docker image by updating `Dockerfile`, `requirements.txt` or `docker-compose.yaml`
 5) Write a (good) `README.md`, possibly also change a license
 
-After this, you can run your project with 
+After this, you can run your project **locally** with 
 
 ```shell
-docker compose run --build --rm amml-project-cpu # CPU Version
+docker compose run --build --rm amml-project-cpu # Local CPU Version
 ```
 
 or 
 
 ```shell
-docker compose run --build --rm amml-project-gpu # GPU Version
+docker compose run --build --rm amml-project-cuda # Local GPU Version
 ```
+
+> [!IMPORTANT]
+> On Hydra, you should use Hydra-specific Docker compose targets to ensure the MLFlow (and other over-the-network apps are available):
+> ```shell
+> docker compose run --build --rm amml-project-hydra-cpu # Hydra CPU Version
+> ```
+> or
+> ```shell
+> docker compose run --build --rm amml-project-hydra-cuda # Hydra CPU Version
+> ```
 
 ### Optional: Download data from the shared UniCloud folder
 
@@ -61,8 +71,9 @@ If you want to use PyCharm for your project, the following needs to be done in a
 In case one decides to use the **Docker Python interpreter**, it is also necessary to do:
 
 - [ ] Make sure to have access to the gpu's in the Docker container (e.g., with the flag `--gpus all`)
-- [ ] Make sure to expose the host network to the Docker container (e.g., with the flag `--add-host=host.docker.internal:host-gateway`)
+- [ ] Make sure to expose the host network to the Docker container (e.g., with the flag `--add-host=host.docker.internal:host-gateway` locally or `--add-host=host.docker.internal:10.18.74.13` on Hydra)
   - Alternatively, one can set the container to use the same network as the host using `--network host`, but this does not work with Jupyter and PyCharm - in such case, replace `host.docker.internal` address with `localhost` in the source code and config
+  - Note that using the host network mode for the Docker container does **not** work in general on Hydra for all users
 
 ## Structure
 
