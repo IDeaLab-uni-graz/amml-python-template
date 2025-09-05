@@ -33,7 +33,7 @@ docker compose run --build --rm amml-project-cuda # Local GPU Version
 ```
 
 > [!IMPORTANT]
-> On Hydra, you should use Hydra-specific Docker compose targets to ensure the MLFlow (and other over-the-network apps are available):
+> On Hydra, you should use Hydra-specific Docker compose targets to ensure the MLFlow (and other over-the-network apps) are available:
 > ```shell
 > docker compose run --build --rm amml-project-hydra-cpu # Hydra CPU Version
 > ```
