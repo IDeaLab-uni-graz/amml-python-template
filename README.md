@@ -34,6 +34,8 @@ docker compose run --build --rm amml-project-cuda # Local GPU Version
 
 > [!NOTE]
 > If you have not changed the docker files, you can just run without the "--build" flag to avoid that docker is forced to rebuild the image every time you run it.
+> 
+> However, if the Dockerfile was not changed since the last time the `docker compose` command was run, it will not force rebuild the image but use the cached version (nevertheless, the check for changes in `Dockerfile` slows it down a bit).
 
 > [!IMPORTANT]
 > On Hydra, you should use Hydra-specific Docker compose targets to ensure the MLFlow (and other over-the-network apps) are available:
