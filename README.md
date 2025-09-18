@@ -42,6 +42,16 @@ docker compose run --build --rm amml-project-cuda # Local GPU Version
 > docker compose run --build --rm amml-project-hydra-cuda # Hydra CPU Version
 > ```
 
+> [!TIP]
+> When trying to connect to MLFlow running on hydra from your computer, you **must**:
+> 1. open ssh connection with port-forwarding, which listens on port 8080 for connections from any address, i.e.,
+> ```shell
+> ssh -A -L 0.0.0.0:8080:localhost:8080 <hydra-username>@hydra
+> ```
+> 2. allow port 8080 (both udp and tcp to be sure) in your **local firewall** settings (distro-dependent), see [this guide](https://www.digitalocean.com/community/tutorials/opening-a-port-on-linux) for an example.
+>
+> You can check the connection by running `curl host.docker.internal:8080` in the Docker shell (`curl` likely needs to be installed manually) -- you should *not* get a timeout or connection unreachable :).
+
 ### Optional: Download data from the shared UniCloud folder
 
 Our best practice is to host internal datasets in the `AMML_shared/datasets` folder in [UniCloud](https://cloud.uni-graz.at). To download data from there, you need to set your UniCloud credentials in `.env`:
