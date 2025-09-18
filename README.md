@@ -58,7 +58,7 @@ docker compose run --build --rm amml-project-cuda # Local GPU Version
 > ```
 > 2. allow port 8080 (both udp and tcp to be sure) in your **local firewall** settings (distro-dependent), see [this guide](https://www.digitalocean.com/community/tutorials/opening-a-port-on-linux) for an example.
 >
-> You can check the connection by running `curl host.docker.internal:8080` in the Docker shell (`curl` likely needs to be installed manually) -- you should *not* get a timeout or connection unreachable :).
+> You can check the connection by running `curl host.docker.internal:8080` in the Docker shell (`curl` likely needs to be installed manually) -- you should *not* get a timeout or destination unreachable, etc. :)
 
 ### Optional: Download data from the shared UniCloud folder
 
