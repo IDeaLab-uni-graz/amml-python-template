@@ -47,7 +47,7 @@ docker compose run --build --rm amml-project-cuda # Local GPU Version
 > or
 > 
 > ```shell
-> docker compose run --build --rm amml-project-hydra-cuda # Hydra CPU Version
+> docker compose run --build --rm amml-project-hydra-cuda # Hydra CUDA Version
 > ```
 
 > [!TIP]
@@ -60,7 +60,7 @@ docker compose run --build --rm amml-project-cuda # Local GPU Version
 >
 > You can check the connection by running `curl host.docker.internal:8080` in the Docker shell (`curl` likely needs to be installed manually) -- you should *not* get a timeout or destination unreachable, etc. :)
 
-### Optional: Download data from the shared UniCloud folder
+### Optional: D[README.md](README.md)ownload data from the shared UniCloud folder
 
 Our best practice is to host internal datasets in the `AMML_shared/datasets` folder in [UniCloud](https://cloud.uni-graz.at). To download data from there, you need to set your UniCloud credentials in `.env`:
 
