@@ -60,24 +60,11 @@ docker compose run --build --rm amml-project-cuda # Local GPU Version
 >
 > You can check the connection by running `curl host.docker.internal:8080` in the Docker shell (`curl` likely needs to be installed manually) -- you should *not* get a timeout or destination unreachable, etc. :)
 
-### Optional: D[README.md](README.md)ownload data from the shared UniCloud folder
+### Optional: Dataset usage
 
-Our best practice is to host internal datasets in the `AMML_shared/datasets` folder in [UniCloud](https://cloud.uni-graz.at). To download data from there, you need to set your UniCloud credentials in `.env`:
+Due to the complexity of correctly handing datasets of different types and structures, a decision was made to move this code to a separate repository/Python package. 
 
-- ) `NEXTCLOUD_USERNAME` should be set to your user name, typically `firstname.lastname`
-- ) Login at [UniCloud](https://cloud.uni-graz.at), got to *Settings/Security*, and create a new device passwort by entering our device in *App name* and clicking *Create new app password*. This password then needs to be set in `NEXTCLOUD_PASSWORD`
-
-After this, you can run
-
-```shell
-python utils/nextcloud_data_loader.py
-```
-
-to list all currently available datasets. An example of how to load one of these datasets can be found in `amml-python-template/dataloader_example.py`.
-
-> Note: Upon usage of the dataset, the data will be downloaded into `/data/datasetname` automatically if not already available locally.
-
-> See `AMML_shared/datasets/README_datasets.md` for further information on how to add new datasets.
+For more information see [amml-utils](https://github.com/IDeaLab-uni-graz/amml-utils).
 
 ### Optional: Using the template with PyCharm
 
@@ -101,7 +88,6 @@ Description of files and directories belonging to this repository:
   - `.../main.py` or `.../__init__.py` - entrypoint of the Python codebase
 - `data/` - directory for (large) data, which should not be version controlled by default
 - `tmp/` - directory for temporary outputs of operations, contents are not version controlled
-- `utils/` - project-independent scripts, e.g., downloading datasets from UniCloud or similar
 - `Dockerfile` - project-specific Docker image definition, likely building upon one of the [AMML base images](https://github.com/IDeaLab-uni-graz/AMML-Python-Base)
 - `docker-compose.yaml` - declarative configuration for building and running project Docker containers
 - `entrypoint.sh` - custom entrypoint of the project Docker image to properly support PyCharm
