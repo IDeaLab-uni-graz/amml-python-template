@@ -1,4 +1,4 @@
-name: "amml_python_ml_template"
+name: "amml_python_template"
 services:
   # Note: If desired, add "version: slim" to the build args
   # Warn: We cannot set the Docker container to work in the
