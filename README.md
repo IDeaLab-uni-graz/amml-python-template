@@ -15,7 +15,7 @@ docker compose run --build --rm amml-project-cpu
 1) **Use it as a template:**
    1) **GitHub**: Create new repository and in the _Configuration_ section set **Start with a template** to `IDeaLab-uni-graz/amml-python-template`, then `git clone` it
    2) **Locally**: Download the content of this repository (do **not** `git clone` it!) into your desired project directory.
-2) Rename the project name `name: "amml_python_ml_template"` in `docker-compose.yaml`
+2) Rename the project name `name: "amml_python_template"` in `docker-compose.yaml`
 3) Rename source folder, called `amml-python-template/` in the template
 4) Setup project Docker image by updating `Dockerfile`, `requirements.txt` or `docker-compose.yaml`
 5) Write a (good) `README.md`, possibly also change a license
