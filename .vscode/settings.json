@@ -1,0 +1,6 @@
+{
+    // This is up for debate! Feel free to open a PR regarding any default/team-level choices
+    // Note: Do not forget to mirror it in amml-python-ml-template
+	"editor.detectIndentation": false,
+    "editor.insertSpaces": true,
+}
