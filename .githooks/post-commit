@@ -1,0 +1,6 @@
+#!/bin/sh
+# Rebuild & push the project image in the background if its dependencies changed (see .container/image.sh).
+# Must never block or fail the git operation.
+root=$(git rev-parse --show-toplevel) || exit 0
+[ -x "$root/.container/image.sh" ] && "$root/.container/image.sh" hook </dev/null
+exit 0

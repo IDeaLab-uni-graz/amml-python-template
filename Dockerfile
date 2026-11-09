@@ -2,9 +2,13 @@
 ARG hardware="cpu"
 # Allowed values: full, slim
 ARG version="full"
+# Pinned base image (published by the base image CI for all variants).
+# Bump with `.container/image.sh bump-base [<tag>] [--repo <repo>]`; changing it triggers an image rebuild.
+ARG base_repo="devidealab/amml-python-base"
+ARG base_tag="main-964757c"
 
-FROM sceptri/amml-python-base-${hardware}:latest AS base-full
-FROM sceptri/amml-python-base-${hardware}-slim:latest AS base-slim
+FROM ${base_repo}-${hardware}:${base_tag} AS base-full
+FROM ${base_repo}-${hardware}-slim:${base_tag} AS base-slim
 
 FROM base-${version} AS final
 LABEL authors="sceptri"

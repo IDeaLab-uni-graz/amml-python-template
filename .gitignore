@@ -6,6 +6,10 @@ tmp/*
 
 # Env file
 .env
+# HPC images
+images/
+*.sif
+.container/image.local.conf
 
 
 # Created by .ignore support plugin (hsz.mobi)

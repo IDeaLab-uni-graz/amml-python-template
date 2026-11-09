@@ -15,10 +15,11 @@ docker compose run --build --rm amml-project-cpu
 1) **Use it as a template:**
    1) **GitHub**: Create new repository and in the _Configuration_ section set **Start with a template** to `IDeaLab-uni-graz/amml-python-template`, then `git clone` it
    2) **Locally**: Download the content of this repository (do **not** `git clone` it!) into your desired project directory.
-2) Rename the project name `name: "amml_python_template"` in `docker-compose.yaml`
+2) Rename the project in `docker-compose.yaml`: the project name `name: "amml_python_template"` and the image names `devidealab/amml-python-template-<hardware>:local` (they should match `IMAGE_NAME` in `.container/image.conf`, see step 6)
 3) Rename source folder, called `amml-python-template/` in the template
 4) Setup project Docker image by updating `Dockerfile`, `requirements.txt` or `docker-compose.yaml`
 5) Write a (good) `README.md`, possibly also change a license
+6) Set `IMAGE_NAME` in `.container/image.conf` (e.g. `devidealab/<project-name>`) and run `.container/image.sh install` (see [HPC images](#hpc-images-apptainersingularity))
 
 After this, you can run your project **locally** with 
 
@@ -60,6 +61,22 @@ docker compose run --build --rm amml-project-cuda # Local GPU Version
 >
 > You can check the connection by running `curl host.docker.internal:8080` in the Docker shell (`curl` likely needs to be installed manually) -- you should *not* get a timeout or destination unreachable, etc. :)
 
+## HPC images (Apptainer/Singularity)
+
+Committing a change to `Dockerfile`, `requirements.txt` or `entrypoint.sh` builds and pushes the project image to DockerHub in the background (the commit stays instant). On the HPC, `.container/hpc-pull.sh` pulls the matching image as a `.sif`. Full guide: [UniCloud Wiki](https://cloud.uni-graz.at/apps/files/files/302280881?dir=/AMML_shared/Organizatorial/Project%20workflow&editing=false&openfile=true).
+
+```shell
+# dev server, once per clone (after setting DOCKERHUB_TOKEN in .env)
+.container/image.sh install
+# dev server, daily: git image status / logs -f / stop / trigger [--force]
+git image status
+# HPC
+git pull && .container/hpc-pull.sh cuda
+```
+
+> [!IMPORTANT]
+> The `Dockerfile` intentionally pins the AMML-Python-Base image to a fixed tag (`ARG base_tag="main-<sha>"`) instead of `latest`, so that the base image never changes unnoticed and every base update triggers exactly one rebuild. Update it with `git image bump-base` (or `.container/image.sh bump-base`) and commit the `Dockerfile`.
+
 ### Optional: Dataset usage
 
 Due to the complexity of correctly handing datasets of different types and structures, a decision was made to move this code to a separate repository/Python package. 
@@ -91,10 +108,5 @@ Description of files and directories belonging to this repository:
 - `Dockerfile` - project-specific Docker image definition, likely building upon one of the [AMML base images](https://github.com/IDeaLab-uni-graz/AMML-Python-Base)
 - `docker-compose.yaml` - declarative configuration for building and running project Docker containers
 - `entrypoint.sh` - custom entrypoint of the project Docker image to properly support PyCharm
-
-> [!TIP]
-> If you need a newer version of one of the base images, you might need to "force pull" the image from DockerHub to replace the locally cached version
-> 
-> ```shell
-> docker pull sceptri/amml-python-base-cpu:latest
-> ```
+- `.container/` - build & push of the project image for the HPC (`image.sh`, configured in `image.conf`) and pulling it there (`hpc-pull.sh`)
+- `.githooks/` - git hooks triggering the background image build, installed by `.container/image.sh install`

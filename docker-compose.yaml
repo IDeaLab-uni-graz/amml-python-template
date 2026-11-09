@@ -16,7 +16,7 @@ services:
     command: bash
     volumes:
       - .:/opt/project
-    image: amml-project-cpu:latest
+    image: devidealab/amml-python-template-cpu:local
   amml-project-hydra-cpu:
     build:
       context: .
@@ -28,7 +28,7 @@ services:
     command: bash
     volumes:
       - .:/opt/project
-    image: amml-project-cpu:latest
+    image: devidealab/amml-python-template-cpu:local
   amml-project-cuda:
     build:
       context: .
@@ -48,7 +48,7 @@ services:
     command: bash
     volumes:
       - .:/opt/project
-    image: amml-project-cuda:latest
+    image: devidealab/amml-python-template-cuda:local
   amml-project-hydra-cuda:
     build:
       context: .
@@ -68,4 +68,4 @@ services:
     command: bash
     volumes:
       - .:/opt/project
-    image: amml-project-cuda:latest
+    image: devidealab/amml-python-template-cuda:local
