@@ -75,7 +75,7 @@ git pull && .container/hpc-pull.sh cuda
 ```
 
 > [!IMPORTANT]
-> The `Dockerfile` intentionally pins the AMML-Python-Base image to a fixed tag (`ARG base_tag="main-<sha>"`) instead of `latest`, so that the base image never changes unnoticed and every base update triggers exactly one rebuild. Update it with `git image bump-base` (or `.container/image.sh bump-base`) and commit the `Dockerfile`.
+> The `Dockerfile` intentionally pins the AMML-Python-Base image to a fixed tag (`ARG base_tag="main-<sha>"`) instead of `latest`, so that the base image never changes unnoticed and every base update triggers exactly one rebuild. Update it with `git image bump-base` (or `.container/image.sh bump-base`) and commit the `Dockerfile`. A daily GitHub Action (`.github/workflows/bump-base-image.yml`) opens a PR when a new base image is available.
 
 ### Optional: Dataset usage
 

@@ -1,0 +1,61 @@
+# Daily check for a new AMML-Python-Base image: if `latest` points to a newer `main-<sha>` tag
+# than the one pinned in the Dockerfile, open (or update) a PR bumping it.
+# Uses `.container/image.sh bump-base`, the same command as for manual bumps.
+#
+# Requires the repository/organization setting
+# "Allow GitHub Actions to create and approve pull requests".
+name: Bump base image
+
+on:
+  schedule:
+    - cron: "17 4 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: bump-base-image
+  cancel-in-progress: false
+
+jobs:
+  bump:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Pin the tag `latest` points to
+        id: bump
+        run: |
+          base_tag() { sed -n 's/^ARG base_tag="\(.*\)"/\1/p' Dockerfile; }
+          echo "old=$(base_tag)" >> "$GITHUB_OUTPUT"
+          .container/image.sh bump-base
+          new=$(base_tag)
+          echo "new=$new" >> "$GITHUB_OUTPUT"
+          echo "sha=${new#main-}" >> "$GITHUB_OUTPUT"
+          echo "repo=$(sed -n 's/^ARG base_repo="\(.*\)"/\1/p' Dockerfile)" >> "$GITHUB_OUTPUT"
+          if git diff --quiet -- Dockerfile; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Open or update the PR
+        if: steps.bump.outputs.changed == 'true'
+        uses: peter-evans/create-pull-request@v7
+        with:
+          # Fixed branch: if the base moves again before merging, the same PR is updated
+          branch: bot/bump-base-image
+          delete-branch: true
+          add-paths: Dockerfile
+          commit-message: Bump base image to ${{ steps.bump.outputs.new }}
+          title: Bump base image to ${{ steps.bump.outputs.new }}
+          body: |
+            `${{ steps.bump.outputs.repo }}`: `${{ steps.bump.outputs.old }}` → `${{ steps.bump.outputs.new }}`
+
+            Base image commit: https://github.com/IDeaLab-uni-graz/AMML-Python-Base/commit/${{ steps.bump.outputs.sha }}
+
+            After merging, the HPC image is rebuilt once the dev server pulls (post-merge hook, see `.container/image.sh`), or run `git image trigger` there.
+
+            *Opened by `.github/workflows/bump-base-image.yml`.*
