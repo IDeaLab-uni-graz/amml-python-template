@@ -16,7 +16,7 @@
 			"name": "Debug Main",
 			"type": "debugpy",
 			"request": "launch",
-			"program": "${workspaceFolder}/amml-python-template/__init__.py",
+			"program": "${workspaceFolder}/amml_python_template/main.py",
 			"console": "integratedTerminal"
 		}
 	]

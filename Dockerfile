@@ -25,6 +25,7 @@ COPY requirements.txt requirements.txt
 RUN cp /opt/build/slim_requirements.txt slim_requirements.txt
 RUN cp /opt/build/${version}_requirements.txt base_requirements.txt
 
+# Install Python dependencies
 RUN pip install --upgrade pip && pip install -r requirements.txt
 
 # Entrypoint shell script is necessary to make it work with PyCharm when docker compose is the Python interpreter

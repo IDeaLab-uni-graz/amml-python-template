@@ -48,4 +48,4 @@ ln -sfn "$(basename "$sif")" "$root/images/$name.sif"
 
 echo "run with e.g.:"
 echo "  $runtime exec $([ "$hardware" = cuda ] && echo '--nv ')--env-file .env --bind $root:/opt/project --pwd /opt/project \\"
-echo "    images/$name.sif python $(basename "$IMAGE_NAME")/__init__.py"
+echo "    images/$name.sif python $(basename "$IMAGE_NAME" | tr - _)/main.py"

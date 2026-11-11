@@ -17,12 +17,14 @@ The base image version is pinned in the `Dockerfile` (see [HPC images](#hpc-imag
    1) **GitHub**: Create new repository and in the _Configuration_ section set **Start with a template** to `IDeaLab-uni-graz/amml-python-template`, then `git clone` it
    2) **Locally**: Download the content of this repository (do **not** `git clone` it!) into your desired project directory.
 2) Rename the project in `docker-compose.yaml`: the project name `name: "amml_python_template"` and the image names `devidealab/amml-python-template-<hardware>:local` (they should match `IMAGE_NAME` in `.container/image.conf`, see step 7)
-3) Rename source folder, called `amml-python-template/` in the template, and update the `Debug Main` path in `.vscode/launch.json` accordingly
+3) Rename source folder, called `amml_python_template/` in the template, and update the `Debug Main` path in `.vscode/launch.json` accordingly
 4) Setup project Docker image by updating `Dockerfile`, `requirements.txt` or `docker-compose.yaml`
 5) Create environment file `.env` from `.env.example`
 6) Write a (good) `README.md`, possibly also change a license
 7) Set `IMAGE_NAME` in `.container/image.conf` (e.g. `devidealab/<project-name>`) and run `.container/image.sh install` (see [HPC images](#hpc-images-apptainersingularity))
 8) Allow GitHub Actions to open PRs in GitHub under `Settings/Actions/General/Workflow permissions/Allow GitHub Actions to create and approve pull requests` (or remove the `.github/workflows/bump-base-image.yml` action)
+
+## Running the project
 
 After this, you can run your project **locally** with 
 
@@ -40,6 +42,9 @@ docker compose run --build --rm amml-project-cuda # Local GPU Version
 > If you have not changed the docker files, you can just run without the "--build" flag to avoid that docker is forced to rebuild the image every time you run it.
 > 
 > However, if the Dockerfile was not changed since the last time the `docker compose` command was run, it will not force rebuild the image but use the cached version (nevertheless, the check for changes in `Dockerfile` slows it down a bit).
+
+> [!NOTE]
+> All services set `shm_size: "16gb"`, because Docker's default of 64 MB of shared memory (`/dev/shm`) is too small for PyTorch DataLoader workers, Ray and Spark.
 
 > [!IMPORTANT]
 > On Hydra, you should use Hydra-specific Docker compose targets to ensure the MLFlow (and other over-the-network apps) are available:
@@ -85,7 +90,7 @@ git pull && .container/hpc-pull.sh cuda
 > [!IMPORTANT]
 > The `Dockerfile` intentionally pins the AMML-Python-Base image to a fixed tag (`ARG base_tag="main-<sha>"`) instead of `latest`, so that the base image never changes unnoticed and every base update triggers exactly one rebuild. Update it with `git image bump-base` (or `.container/image.sh bump-base`) and commit the `Dockerfile`. A daily GitHub Action (`.github/workflows/bump-base-image.yml`) opens a PR when a new base image is available.
 
-### Optional: Dataset usage
+## Optional: Dataset usage
 
 Due to the complexity of correctly handing datasets of different types and structures, a decision was made to move this code to a separate repository/Python package. 
 
@@ -95,8 +100,8 @@ For more information see [amml-utils](https://github.com/IDeaLab-uni-graz/amml-u
 
 Description of files and directories belonging to this repository:
 
-- `amml-python-template/` - source code directory to be renamed when using the template
-  - `.../main.py` or `.../__init__.py` - entrypoint of the Python codebase
+- `amml_python_template/` - source code directory to be renamed when using the template
+  - `.../main.py` - entrypoint of the Python codebase
 - `data/` - directory for (large) data, which should not be version controlled by default
 - `tmp/` - directory for temporary outputs of operations, contents are not version controlled
 - `Dockerfile` - project-specific Docker image definition, likely building upon one of the [AMML base images](https://github.com/IDeaLab-uni-graz/AMML-Python-Base)
