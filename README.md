@@ -4,22 +4,25 @@ This is the basic light-weight template for Python + Pytorch projects running on
 
 For standard machine learning Python projects in the AMML team use the complete [AMML Python ML template](https://github.com/IDeaLab-uni-graz/amml-python-ml-template). More information regarding the design and contents of the base images can be found in the [respective repository](https://github.com/IDeaLab-uni-graz/AMML-Python-Base).
 
-To make a quick testrun (for testing only!), copy the `.env.example` file, rename the copy to `.env` and run
-
+Run with, e.g., 
 ```
 docker compose run --build --rm amml-project-cpu
 ```
+
+The base image version is pinned in the `Dockerfile` (see [HPC images](#hpc-images-apptainersingularity)). To upgrade to a newer version, run `git image bump-base` (or `.container/image.sh bump-base`) and rebuild; pulling `latest` has no effect.
 
 ## Using this as base for a new project
 
 1) **Use it as a template:**
    1) **GitHub**: Create new repository and in the _Configuration_ section set **Start with a template** to `IDeaLab-uni-graz/amml-python-template`, then `git clone` it
    2) **Locally**: Download the content of this repository (do **not** `git clone` it!) into your desired project directory.
-2) Rename the project in `docker-compose.yaml`: the project name `name: "amml_python_template"` and the image names `devidealab/amml-python-template-<hardware>:local` (they should match `IMAGE_NAME` in `.container/image.conf`, see step 6)
-3) Rename source folder, called `amml-python-template/` in the template
+2) Rename the project in `docker-compose.yaml`: the project name `name: "amml_python_template"` and the image names `devidealab/amml-python-template-<hardware>:local` (they should match `IMAGE_NAME` in `.container/image.conf`, see step 7)
+3) Rename source folder, called `amml-python-template/` in the template, and update the `Debug Main` path in `.vscode/launch.json` accordingly
 4) Setup project Docker image by updating `Dockerfile`, `requirements.txt` or `docker-compose.yaml`
-5) Write a (good) `README.md`, possibly also change a license
-6) Set `IMAGE_NAME` in `.container/image.conf` (e.g. `devidealab/<project-name>`) and run `.container/image.sh install` (see [HPC images](#hpc-images-apptainersingularity))
+5) Create environment file `.env` from `.env.example`
+6) Write a (good) `README.md`, possibly also change a license
+7) Set `IMAGE_NAME` in `.container/image.conf` (e.g. `devidealab/<project-name>`) and run `.container/image.sh install` (see [HPC images](#hpc-images-apptainersingularity))
+8) Allow GitHub Actions to open PRs in GitHub under `Settings/Actions/General/Workflow permissions/Allow GitHub Actions to create and approve pull requests` (or remove the `.github/workflows/bump-base-image.yml` action)
 
 After this, you can run your project **locally** with 
 
@@ -61,6 +64,11 @@ docker compose run --build --rm amml-project-cuda # Local GPU Version
 >
 > You can check the connection by running `curl host.docker.internal:8080` in the Docker shell (`curl` likely needs to be installed manually) -- you should *not* get a timeout or destination unreachable, etc. :)
 
+## IDE setup
+
+- **PyCharm**: [UniCloud Wiki](https://cloud.uni-graz.at/apps/files/files/302282039?dir=/AMML_shared/Organizatorial/Project%20workflow&editing=false&openfile=true)
+- **VSCode** (Dev Containers): [UniCloud Wiki](https://cloud.uni-graz.at/apps/files/files/302282067?dir=/AMML_shared/Organizatorial/Project%20workflow&editing=false&openfile=true)
+
 ## HPC images (Apptainer/Singularity)
 
 Committing a change to `Dockerfile`, `requirements.txt` or `entrypoint.sh` builds and pushes the project image to DockerHub in the background (the commit stays instant). On the HPC, `.container/hpc-pull.sh` pulls the matching image as a `.sif`. Full guide: [UniCloud Wiki](https://cloud.uni-graz.at/apps/files/files/302280881?dir=/AMML_shared/Organizatorial/Project%20workflow&editing=false&openfile=true).
@@ -83,20 +91,6 @@ Due to the complexity of correctly handing datasets of different types and struc
 
 For more information see [amml-utils](https://github.com/IDeaLab-uni-graz/amml-utils).
 
-### Optional: Using the template with PyCharm
-
-If you want to use PyCharm for your project, the following needs to be done in addition:What needs to be done after starting a new project to use it with PyCharm:
-
-- [ ] Set up the Python interpreter to use **Docker compose**, or possibly also Docker.
-- [ ] Set the Jupyter server to listen on all addresses by adding `--ip 0.0.0.0` to _command line arguments_ for the local Jupyter connection.
-
-In case one decides to use the **Docker Python interpreter**, it is also necessary to do:
-
-- [ ] Make sure to have access to the gpu's in the Docker container (e.g., with the flag `--gpus all`)
-- [ ] Make sure to expose the host network to the Docker container (e.g., with the flag `--add-host=host.docker.internal:host-gateway` locally or `--add-host=host.docker.internal:10.18.74.13` on Hydra)
-  - Alternatively, one can set the container to use the same network as the host using `--network host`, but this does not work with Jupyter and PyCharm - in such case, replace `host.docker.internal` address with `localhost` in the source code and config
-  - Note that using the host network mode for the Docker container does **not** work in general on Hydra for all users
-
 ## Structure
 
 Description of files and directories belonging to this repository:
@@ -110,3 +104,5 @@ Description of files and directories belonging to this repository:
 - `entrypoint.sh` - custom entrypoint of the project Docker image to properly support PyCharm
 - `.container/` - build & push of the project image for the HPC (`image.sh`, configured in `image.conf`) and pulling it there (`hpc-pull.sh`)
 - `.githooks/` - git hooks triggering the background image build, installed by `.container/image.sh install`
+- `.github/workflows/` - GitHub Actions, e.g. the daily check for a new AMML-Python-Base tag (`bump-base-image.yml`)
+- `.vscode/`, `.devcontainer/` - VSCode and Dev Containers configuration
