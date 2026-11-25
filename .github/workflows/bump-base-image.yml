@@ -51,6 +51,8 @@ jobs:
           add-paths: Dockerfile
           commit-message: Bump base image to ${{ steps.bump.outputs.new }}
           title: Bump base image to ${{ steps.bump.outputs.new }}
+          # Assigned so the maintainer gets a notification
+          assignees: sceptri
           body: |
             `${{ steps.bump.outputs.repo }}`: `${{ steps.bump.outputs.old }}` → `${{ steps.bump.outputs.new }}`
 
